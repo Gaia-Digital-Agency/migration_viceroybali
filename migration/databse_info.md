@@ -3,8 +3,6 @@
 **Project:** Viceroy Bali Migration
 **Database:** MariaDB 10.11.15
 
----
-
 ## Database Creation
 
 ```sql
@@ -52,7 +50,3 @@ mysql -u viceroy_user -p viceroy_db_name -e "SHOW TABLES;"
 - [x] Snapshot transferred to /var/www/backups/
 - [ ] Snapshot imported
 - [ ] wp-config.php updated with new database credentials
-
----
-
-**Next Step:** Import database snapshot and configure WordPress

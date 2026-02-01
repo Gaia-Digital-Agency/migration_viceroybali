@@ -185,6 +185,4 @@ nginx -t
 tail -f /var/log/nginx/error.log
 ```
 
----
-
 **Project managed by:** Gaia Digital Agency

@@ -4,8 +4,6 @@
 **Date:** February 1, 2026
 **Server:** 34.142.200.251
 
----
-
 ## Critical Issues
 
 ### 1. Book Now Functionality Not Working ⚠️
@@ -40,8 +38,6 @@ wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
 
 **Impact:** HIGH - Booking system non-functional on staging
 
----
-
 ### 2. Logs Configuration ✅ OPTIMIZED
 
 **Status:** Already properly configured
@@ -61,8 +57,6 @@ delaycompress
 ```
 
 **Recommendation:** No changes needed - already optimized
-
----
 
 ## Optimization Opportunities
 
@@ -107,8 +101,6 @@ systemctl restart php8.3-fpm
 
 **Risk:** LOW - Can revert if memory issues occur
 
----
-
 ### 2. PHP OPcache Tuning ⚡ LOW PRIORITY
 
 **Current Settings:**
@@ -141,8 +133,6 @@ systemctl restart php8.3-fpm
 - Better caching of WordPress core
 
 **Risk:** LOW
-
----
 
 ### 3. Redis Object Cache Integration ⚡ HIGH PRIORITY
 
@@ -183,8 +173,6 @@ chown www-data:www-data object-cache.php
 
 **Risk:** LOW - Can disable if issues occur
 
----
-
 ### 4. Disable Unnecessary Plugins ⚡ MEDIUM PRIORITY
 
 **Current Status:** 44 plugin directories installed
@@ -214,8 +202,6 @@ wp plugin deactivate litespeed-cache wordfence query-monitor \
 - Faster admin dashboard
 - Fewer potential conflicts
 
----
-
 ### 5. Nginx FastCGI Cache (Optional) ⚡ LOW PRIORITY
 
 **Status:** Not currently implemented
@@ -236,8 +222,6 @@ fastcgi_no_cache $skip_cache;
 ```
 
 **Recommendation:** Skip for now, WP Rocket sufficient
-
----
 
 ### 6. Database Optimization ⚡ LOW PRIORITY
 
@@ -265,8 +249,6 @@ wp db optimize \
 
 **Risk:** VERY LOW
 
----
-
 ### 7. Image Optimization (Already Done) ✅
 
 **Status:** Site uses WebP format and lazy loading
@@ -277,8 +259,6 @@ wp db optimize \
 - CDN caching configured (30-day expiry)
 
 **No action needed**
-
----
 
 ## Architecture Optimizations (Already Implemented) ✅
 
@@ -309,8 +289,6 @@ wp db optimize \
    - Clean directory structure
    - 3.1 GB unnecessary files removed
 
----
-
 ## Implementation Priority
 
 ### Do Immediately (Critical):
@@ -326,8 +304,6 @@ wp db optimize \
 6. **Tune PHP OPcache** - Increase memory and settings
 7. **Consider FastCGI Cache** - Only if WP Rocket insufficient
 
----
-
 ## Performance Metrics (Estimated)
 
 **Current Performance:**
@@ -339,8 +315,6 @@ wp db optimize \
 - TTFB: ~200ms (60% improvement)
 - Page Load: 1-1.5 seconds (50% improvement)
 - Database Queries: 10-20 per page (80% reduction with Redis)
-
----
 
 ## Safety Notes
 
@@ -366,8 +340,6 @@ systemctl status php8.3-fpm
 # Check Redis
 redis-cli info stats
 ```
-
----
 
 ## Commands Summary
 
@@ -404,8 +376,6 @@ wp plugin deactivate litespeed-cache wordfence query-monitor \
 wp transient delete --all --path=/var/www/viceroybali/public_html/
 wp db optimize --path=/var/www/viceroybali/public_html/
 ```
-
----
 
 ## Risks & Rollback
 

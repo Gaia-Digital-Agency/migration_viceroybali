@@ -15,8 +15,6 @@
 - Password reset procedures
 - Security best practices
 
----
-
 ## Retrieving User Information
 
 ### On GCP Server (SSH Required)
@@ -81,8 +79,6 @@ wp db query "
 " --path=/var/www/viceroybali/public_html/ --allow-root
 ```
 
----
-
 ## WordPress User Roles
 
 ### Role Hierarchy
@@ -122,8 +118,6 @@ User 2:
 ```
 [Populate after running wp user list command]
 ```
-
----
 
 ## Password Management
 
@@ -481,8 +475,6 @@ wp user list \
   > /var/www/backups/users_audit_$(date +%Y%m%d).json
 ```
 
----
-
 ## Backup User Data
 
 ### Database Backup (Includes Users)
@@ -508,8 +500,6 @@ wp db import /var/www/backups/database_with_users_YYYYMMDD.sql \
   --path=/var/www/viceroybali/public_html/ \
   --allow-root
 ```
-
----
 
 ## Recommendations
 
@@ -552,8 +542,6 @@ wp db import /var/www/backups/database_with_users_YYYYMMDD.sql \
    - Set up alerts for suspicious activity
    - Review Wordfence security scans
 
----
-
 ## Change Log
 
 ### User Account Changes
@@ -572,8 +560,6 @@ User: [username]
 By: [admin name]
 Notes: [reason for change]
 ```
-
----
 
 ## Quick Reference Commands
 
@@ -602,15 +588,11 @@ wp user session destroy USERNAME --all \
   --path=/var/www/viceroybali/public_html/ --allow-root
 ```
 
----
-
 ## Related Documentation
 
 - **[setup/step02.md](setup/step02.md)** - WordPress deployment and configuration
 - **[features/architecture.md](features/architecture.md)** - System architecture
 - **wp-config.php** - Security settings (DISALLOW_FILE_EDIT)
-
----
 
 ## Important Security Reminders
 
@@ -621,8 +603,38 @@ wp user session destroy USERNAME --all \
 5. ✅ **ALWAYS** remove inactive or unnecessary user accounts
 6. ✅ **REGULARLY** audit user access and permissions
 
----
 
-**Status:** Template created - populate with actual user data from GCP server
-**Last Updated:** February 1, 2026
-**Next Audit Due:** March 1, 2026 (30 days)
+USER DATA
+
+| ID | user_login     | display_name   | user_email     | user_registere | roles               |
+|    |                |                |                | d              |                     |
++----+----------------+----------------+----------------+----------------+---------------------+
+| 23 | Amanda.Syrowat | Amanda Syrowat | viceroy@boomit | 2023-12-10 07: | author              |
+|    | ka             | ka             | .com.au        | 41:50          |                     |
+| 18 | dosm           | Chandra Novita | dosm@viceroyba | 2022-09-12 03: | administrator       |
+|    |                |                | li.com         | 04:31          |                     |
+| 9  | gda-anthony    | GDA Anthony    | anthony@gaiada | 2021-11-25 00: | administrator       |
+|    |                |                | .com           | 46:18          |                     |
+| 2  | gda-gusde      | GDA Gusde      | gusde@gaiada.c | 2021-11-25 00: | administrator       |
+|    |                |                | om             | 46:18          |                     |
+| 16 | gda-reva       | Reva Rizky     | reva@gaiada.co | 2022-04-26 03: | administrator       |
+|    |                |                | m              | 50:08          |                     |
+| 14 | gda-seo        | GDA SEO        | seo@gaiada.com | 2022-01-27 08: | administrator       |
+|    |                |                |                | 40:10          |                     |
+| 24 | gda-steven     | GDA Steven     | steven@gaiada. | 2023-12-21 01: | administrator       |
+|    |                |                | com            | 55:55          |                     |
+| 25 | gda-web        | GDA Web        | web@gaiada.com | 2024-11-19 01: | administrator       |
+|    |                |                |                | 19:38          |                     |
+| 22 | infoBoomit     | Info BoomIt    | info@boomit.co | 2023-12-06 07: | administrator       |
+|    |                |                | m.au           | 02:37          |                     |
+| 13 | patrick        | Patrick Farrel | gm@viceroybali | 2022-01-12 01: | administrator       |
+|    |                | l              | .com           | 17:40          |                     |
+| 26 | Stripe         | Stripe         | stripe@gaiada. | 2025-05-16 06: | stripe_admin        |
+|    |                |                | com            | 43:25          |                     |
+| 17 | viceroy-pr     | Viceroy PR     | pr@viceroybali | 2022-09-12 03: | administrator       |
+|    |                |                | .com           | 01:32          |                     |
++----+----------------+----------------+----------------+----------------+---------------------+
+
+WP-admun login
+user gda-web
+pw: gda-web

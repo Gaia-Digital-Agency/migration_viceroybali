@@ -6,8 +6,6 @@
 **Status:** Solution documented, not yet executed
 **Date:** February 1, 2026
 
----
-
 ## Problem Summary
 
 The **Book Now** functionality on the staging site (http://34.142.200.251) redirects users to the production domain (https://www.viceroybali.com), making it impossible to test the booking flow on staging.
@@ -24,8 +22,6 @@ The **Book Now** functionality on the staging site (http://34.142.200.251) redir
 - **HIGH** - Cannot test booking system before production deployment
 - Stakeholders cannot verify booking flow changes
 - Risk of deploying untested booking functionality to production
-
----
 
 ## Root Cause Analysis
 
@@ -81,8 +77,6 @@ If you do a simple MySQL `REPLACE()`, you'll corrupt serialized data because:
 3. Re-serializing with correct length prefixes
 4. Updating database safely
 
----
-
 ## Solution
 
 ### The Fix: WP-CLI Search-Replace
@@ -119,8 +113,6 @@ WordPress post GUIDs should **never** be changed:
 - Used by RSS feeds, pingbacks, trackbacks
 - Changing them breaks external references
 - WordPress core recommendation: leave GUIDs unchanged
-
----
 
 ## Step-by-Step Execution Plan
 
@@ -291,8 +283,6 @@ After executing the fix:
 - [ ] Navigation links point to staging IP
 - [ ] Images load from staging domain
 
----
-
 ## Expected Results
 
 ### Before Fix:
@@ -317,8 +307,6 @@ Tables affected:
 - `vb21_yoast_indexable` - SEO data
 - `vb21_polylang*` - Multi-language links
 - Other plugin tables with URLs
-
----
 
 ## Rollback Plan
 
@@ -354,8 +342,6 @@ wp option get home --path=/var/www/viceroybali/public_html/ --allow-root
 - Pages show errors or blank content
 - Serialized data corruption errors in logs
 - Unexpected behavior in WordPress admin
-
----
 
 ## Important Notes
 
@@ -395,8 +381,6 @@ Viceroy Bali uses **Polylang** for multi-language support:
 - `/en/`, `/id/` paths preserved
 - Only domain changes, not URI paths
 
----
-
 ## Risk Assessment
 
 ### Risk Level: **LOW** ⚠️
@@ -431,8 +415,6 @@ Viceroy Bali uses **Polylang** for multi-language support:
    - Or restore from backup
    - Both methods quick and reliable
 
----
-
 ## Performance Impact
 
 ### During Execution:
@@ -445,8 +427,6 @@ Viceroy Bali uses **Polylang** for multi-language support:
 - URL length unchanged (similar character count)
 - Database size unchanged
 - No added overhead
-
----
 
 ## Alternative Methods (Not Recommended)
 
@@ -467,8 +447,6 @@ SET post_content = REPLACE(post_content, 'https://www.viceroybali.com', 'http://
 **Pros:** Visual interface
 **Cons:** Very slow, error-prone, misses serialized data
 **Verdict:** Use WP-CLI instead
-
----
 
 ## Troubleshooting
 
@@ -514,8 +492,6 @@ wp db query "SELECT COUNT(*) FROM vb21_posts WHERE post_content LIKE '%www.vicer
 wp search-replace 'www.viceroybali.com' '34.142.200.251' --dry-run ...
 ```
 
----
-
 ## Commands Quick Reference
 
 ### Full Execution Sequence:
@@ -544,8 +520,6 @@ systemctl restart php8.3-fpm
 wp option get home --path=/var/www/viceroybali/public_html/ --allow-root
 ```
 
----
-
 ## Next Steps After Fix
 
 Once Book Now functionality is working on staging:
@@ -571,8 +545,6 @@ Once Book Now functionality is working on staging:
    - Tune PHP-FPM pool
    - Optimize database
 
----
-
 ## Related Documentation
 
 - **[port.md](port.md)** - Production deployment guide (includes reverse URL change)
@@ -589,7 +561,3 @@ Once Book Now functionality is working on staging:
 **Execution Time:** ~5 minutes (including backup and verification)
 **Difficulty:** Easy (copy-paste commands)
 **Risk:** Low (full backup, reversible, staging environment)
-
----
-
-**Ready to execute when approved by stakeholder.**

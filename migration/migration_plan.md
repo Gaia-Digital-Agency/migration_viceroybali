@@ -27,8 +27,6 @@ Zero Downtime Switch: We will use a "DNS Cutover." The old site stays live until
 
 3. Migration Roadmap
 
-
-
 For Phase 1, the goal is to build a hosting environment that is faster than Hostinger but remains compatible with your current WordPress setup.
 
 TECH STACK (GCP)
@@ -64,7 +62,3 @@ This is your insurance policy. We will attach an automated policy to your server
 Frequency: Weekly (e.g., every Sunday at 3:00 AM Bali time).
 Retention: 4 Weeks (We always keep the last month of backups).
 Manual Trigger: We will also take a "Gold Master" snapshot immediately after the migration is finished and verified.
-
-Technical Summary Table
-
-

@@ -4,8 +4,6 @@
 **Date:** February 1, 2026
 **Commit Type:** Initial documentation and infrastructure setup
 
----
-
 ## Commit Summary
 
 **Initial commit: Complete Viceroy Bali migration documentation and infrastructure configuration**
@@ -17,8 +15,6 @@ This commit captures the complete migration from Hostinger to Google Cloud Platf
 - PHP-FPM tuning
 - Production deployment planning
 - Comprehensive documentation
-
----
 
 ## Files Added
 
@@ -52,8 +48,6 @@ This commit captures the complete migration from Hostinger to Google Cloud Platf
 ### /optimization/ - Performance & Issues
 - **optimizations_and_issues.md** - Performance optimizations and issue tracking
 - **can_remove.md** - Removable files analysis (3.1 GB identified)
-
----
 
 ## Key Accomplishments Documented
 
@@ -91,8 +85,6 @@ This commit captures the complete migration from Hostinger to Google Cloud Platf
 - Production cutover plan
 - Troubleshooting guides
 
----
-
 ## Current Status
 
 ### Working
@@ -113,8 +105,6 @@ This commit captures the complete migration from Hostinger to Google Cloud Platf
 - **Removable Files:** 3.1 GB in /var/www/removed_files/
 - **Database:** 183 MB, 107 tables
 - **Performance:** TTFB 200-400ms (improved from 800-1200ms)
-
----
 
 ## Commit Message
 
@@ -152,8 +142,6 @@ Next: Fix Book Now URLs, DNS cutover when approved
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 ```
 
----
-
 ## File Organization
 
 ```
@@ -188,8 +176,6 @@ viceroybali/
     ├── optimizations_and_issues.md    # Optimizations guide
     └── can_remove.md                  # File cleanup analysis
 ```
-
----
 
 ## Git Commands to Execute
 
@@ -238,8 +224,6 @@ git log --oneline
 git show --stat
 ```
 
----
-
 ## Verification Checklist
 
 After commit:
@@ -248,8 +232,6 @@ After commit:
 - [ ] No sensitive data committed (.gitignore applied)
 - [ ] File structure organized logically
 - [ ] Documentation complete and accurate
-
----
 
 ## Next Steps After Commit
 
@@ -274,9 +256,3 @@ After commit:
    git push -u origin main
    ```
 
----
-
-**Status:** Ready to commit
-**Files:** 18 markdown files
-**Total Documentation:** ~50,000+ words
-**Commit Type:** Initial documentation

@@ -4,8 +4,6 @@
 **Purpose:** Identify non-essential files to reclaim disk space
 **Current Disk Usage:** 50 GB total, 29 GB used, 20 GB free
 
----
-
 ## Summary
 
 | Category | Total Size | Safe to Remove |
@@ -41,8 +39,6 @@ rm -rf /var/www/viceroybali/misc_backups/*
 - We have complete backup in gs://viceroybali_bucket/viceroybali_backup.tar.gz
 - Database snapshot separately stored in /var/www/backups/
 
----
-
 ### Location: /var/www/viceroybali/public_html/wp-content/backups-dup-lite/
 **Size:** ~500 MB (estimated)
 **Status:** ✅ Safe to remove
@@ -53,8 +49,6 @@ rm -rf /var/www/viceroybali/public_html/wp-content/backups-dup-lite/
 ```
 
 **Reason:** Old backup plugin archives no longer needed.
-
----
 
 ### Location: /var/www/viceroybali/public_html/wp-content/updraft/
 **Size:** ~300 MB (estimated)
@@ -67,8 +61,6 @@ rm -rf /var/www/viceroybali/public_html/wp-content/updraft/*
 
 **Reason:** Old UpdraftPlus backups. Keep the plugin active but remove old archives.
 
----
-
 ### Location: /var/www/viceroybali/wordpress-backups/
 **Size:** Minimal
 **Status:** ✅ Safe to remove
@@ -76,8 +68,6 @@ rm -rf /var/www/viceroybali/public_html/wp-content/updraft/*
 ```bash
 rm -rf /var/www/viceroybali/wordpress-backups/
 ```
-
----
 
 ## 2. Cache Directories (MEDIUM PRIORITY - 120 MB)
 
@@ -92,8 +82,6 @@ rm -rf /var/www/viceroybali/lscache/*
 
 **Reason:** LiteSpeed cache is Hostinger-specific, doesn't work with Nginx.
 
----
-
 ### Location: /var/www/viceroybali/public_html/wp-content/cache/
 **Size:** ~50 MB (estimated)
 **Status:** ✅ Safe to remove
@@ -105,8 +93,6 @@ rm -rf /var/www/viceroybali/public_html/wp-content/cache/*
 
 **Reason:** Will be regenerated automatically by caching plugins.
 
----
-
 ### Location: /var/www/viceroybali/public_html/wp-content/litespeed/
 **Size:** ~20 MB (estimated)
 **Status:** ✅ Safe to remove
@@ -117,8 +103,6 @@ rm -rf /var/www/viceroybali/public_html/wp-content/litespeed/*
 ```
 
 **Reason:** LiteSpeed Cache plugin incompatible with Nginx.
-
----
 
 ## 3. Temporary Files (MEDIUM PRIORITY - 177 MB)
 
@@ -136,8 +120,6 @@ find /var/www/viceroybali/tmp/ -type f -mtime +7 -delete
 
 **Reason:** Temporary files that may be needed by running processes. Only remove old files.
 
----
-
 ### Location: /var/www/viceroybali/public_html/wp-content/upgrade/
 **Size:** ~10 MB
 **Status:** ✅ Safe to remove
@@ -148,8 +130,6 @@ rm -rf /var/www/viceroybali/public_html/wp-content/upgrade/*
 
 **Reason:** Temporary WordPress update files.
 
----
-
 ### Location: /var/www/viceroybali/public_html/wp-content/upgrade-temp-backup/
 **Size:** ~20 MB
 **Status:** ✅ Safe to remove
@@ -159,8 +139,6 @@ rm -rf /var/www/viceroybali/public_html/wp-content/upgrade-temp-backup/*
 ```
 
 **Reason:** Temporary backup files from plugin/theme updates.
-
----
 
 ## 4. Log Files (LOW PRIORITY - 23 MB)
 
@@ -178,8 +156,6 @@ rm -rf /var/www/viceroybali/logs/*
 
 **Reason:** Hostinger logs may be useful for debugging but not needed for operation.
 
----
-
 ### Location: /var/www/viceroybali/public_html/wp-content/wflogs/
 **Size:** ~5 MB
 **Status:** ⚠️ Keep recent
@@ -190,8 +166,6 @@ find /var/www/viceroybali/public_html/wp-content/wflogs/ -type f -mtime +30 -del
 ```
 
 **Reason:** Wordfence security logs. Keep recent ones for security monitoring.
-
----
 
 ## 5. Plugin Archives (HIGH PRIORITY - 76 MB)
 
@@ -205,8 +179,6 @@ rm /var/www/viceroybali/public_html/wp-content/plugins.zip
 ```
 
 **Reason:** Manual backup archive. Plugins already installed and backed up in main archive.
-
----
 
 ### Location: /var/www/viceroybali/public_html/wp-content/plugins/acfpro.zip
 **Size:** ~2 MB
@@ -251,8 +223,6 @@ mysql -u viceroy_user -p viceroy_db_name -e "SELECT option_value FROM vb21_optio
 
 **Estimated Space Savings:** 40-50 MB
 
----
-
 ## 7. Hostinger-Specific Files (LOW PRIORITY - ~15 MB)
 
 ### Location: Various
@@ -275,8 +245,6 @@ rm /var/www/viceroybali/lscmData/*
 
 **Reason:** Hostinger/cPanel/LiteSpeed specific files not needed on GCP.
 
----
-
 ## 8. Hidden Development Files (LOW PRIORITY - 1.5 MB)
 
 ### Location: /var/www/viceroybali/viceroybali.git/
@@ -291,8 +259,6 @@ ls -la /var/www/viceroybali/viceroybali.git/
 rm -rf /var/www/viceroybali/viceroybali.git/
 ```
 
----
-
 ### Location: /var/www/viceroybali/public_html/.git/
 **Status:** ⚠️ Consider keeping
 
@@ -303,14 +269,10 @@ rm -rf /var/www/viceroybali/viceroybali.git/
 
 **Recommendation:** Keep if site uses Git deployment, otherwise remove.
 
----
-
 ### Location: /var/www/viceroybali/post-receive
 **Status:** ⚠️ Git hook
 
 **Recommendation:** Remove if not using Git deployment.
-
----
 
 ## 9. Misc Unnecessary Directories (LOW PRIORITY)
 
@@ -332,8 +294,6 @@ rm -rf /var/www/viceroybali/public_ftp/
 rm -rf /var/www/viceroybali/cache/
 ```
 
----
-
 ### Location: /var/www/viceroybali/public_html/.quarantine/
 **Status:** ✅ Safe to remove
 
@@ -343,8 +303,6 @@ rm -rf /var/www/viceroybali/public_html/.quarantine/
 
 **Reason:** Hostinger malware quarantine folder.
 
----
-
 ### Location: /var/www/viceroybali/public_html/.tmb/
 **Status:** ✅ Safe to remove
 
@@ -353,8 +311,6 @@ rm -rf /var/www/viceroybali/public_html/.tmb/
 ```
 
 **Reason:** File manager thumbnail cache.
-
----
 
 ## 10. Specific WordPress Files
 
@@ -371,8 +327,6 @@ rm /var/www/viceroybali/public_html/.htaccess*
 
 **Reason:** Apache .htaccess files. Nginx uses different configuration.
 
----
-
 ### Location: /var/www/viceroybali/public_html/wp-content/advanced-cache.php
 **Status:** ✅ Safe to remove
 
@@ -381,8 +335,6 @@ rm /var/www/viceroybali/public_html/wp-content/advanced-cache.php
 ```
 
 **Reason:** LiteSpeed Cache advanced cache file (incompatible with Nginx).
-
----
 
 ## Cleanup Script
 
@@ -434,8 +386,6 @@ echo "Cleanup complete!"
 du -sh /var/www/viceroybali/
 ```
 
----
-
 ## Files to KEEP (DO NOT REMOVE)
 
 ✅ **Keep These:**
@@ -446,8 +396,6 @@ du -sh /var/www/viceroybali/
 - `/var/www/viceroybali/public_html/wp-content/themes/twentytwentyfive/` - Default fallback theme
 - `/var/www/backups/` - Database snapshot and important backups
 - `/var/www/viceroybali/ssl/` - SSL certificate files (if any)
-
----
 
 ## Verification After Cleanup
 
@@ -468,8 +416,6 @@ curl -I http://34.142.200.251
 tail -f /var/log/nginx/viceroybali_error.log
 ```
 
----
-
 ## Notes
 
 1. **Always verify before deleting** - Check active theme/plugins first
@@ -477,8 +423,6 @@ tail -f /var/log/nginx/viceroybali_error.log
 3. **Rollback plan** - Can restore from GCP bucket if needed
 4. **Test after cleanup** - Ensure WordPress loads correctly
 5. **No Hostinger access** - Do not go back to Hostinger to fetch files
-
----
 
 **Estimated Total Space Reclaimed:** 2.7 GB
 **New Free Space:** ~23 GB (from current 20 GB)
