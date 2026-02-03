@@ -12,7 +12,135 @@
 | Phase | Tasks | When |
 |-------|-------|------|
 | **Phase 1: Prep Work** | 9 tasks | Do NOW |
+| **Phase 1.5: URL Redirects** | 8 pages | Do NOW |
 | **Phase 2: Cutover Day** | 3 tasks | On DNS change day |
+
+---
+
+## ⚠️ IMPORTANT: 27 Pages Require URL Update for Live
+
+When migrating from staging to live, all 27 main pages will need URL updates from `http://34.158.47.112/viceroybali/` to `https://www.viceroybali.com/`.
+
+**This will be handled automatically by the Phase 2 search-replace command:**
+```bash
+wp search-replace 'http://34.158.47.112/viceroybali' 'https://www.viceroybali.com' \
+  --path=/var/www/viceroybali/public_html/ \
+  --skip-columns=guid --all-tables --allow-root
+```
+
+### Complete Page Inventory (27 Pages)
+
+| Section | Page | Staging URL | Status |
+|---------|------|-------------|--------|
+| **Home** | English Homepage | `/en/` | ✅ Working |
+| **Villas** | All Accommodation | `/en/room/` | ✅ Working |
+| **Villas** | Pool Suite | `/en/room/pool-suite/` | ✅ Working |
+| **Villas** | Terrace Villas | `/en/room/terrace-villas/` | ✅ Working |
+| **Villas** | Deluxe Terrace Villa | `/en/room/deluxe-terrace-villa/` | ✅ Working |
+| **Villas** | Premium Club Pool Villa | `/en/room/premium-club-pool-villa/` | ✅ Working |
+| **Villas** | Elephant Villa | `/en/room/elephant-villa/` | ✅ Working |
+| **Villas** | Vice Regal Villa | `/en/room/vice-regal-villa/` | ✅ Working |
+| **Villas** | Viceroy Bali Villa | `/en/room/viceroy-bali/` | ✅ Working |
+| **Villas** | Garden Villa | `/en/room/garden-villa/` | ✅ Working |
+| **Offers** | Hotel Offers | `/en/hotel-offers/` | ✅ Working |
+| **Offers** | Packages | `/en/packages/` | ✅ Working |
+| **Dining** | Bali Restaurants | `/en/bali-restaurants/` | ✅ Working |
+| **Experiences** | Wellness | `/en/wellness/` | ✅ Working |
+| **Experiences** | Wellness Experiences | `/en/wellness-experiences/` | ✅ Working |
+| **Experiences** | Activities | `/en/bali-activities/` | ✅ Working |
+| **Experiences** | Destination/Ubud | `/en/ubud/` | ✅ Working |
+| **Media** | Gallery | `/en/gallery/` | ✅ Working |
+| **Media** | Blog | `/en/blog/` | ✅ Working |
+| **Media** | Viceroy Story/About | `/en/about/` | ✅ Working |
+| **Other** | Facilities | `/en/facilities/` | ✅ Working |
+| **Other** | Contact | `/en/contact/` | ✅ Working |
+| **Other** | Book Now/Reservation | `/en/reservation/` | ✅ Working |
+
+### Pages Verified: February 3, 2026
+
+---
+
+# Phase 1.5: Fix 8 Broken URL Paths
+
+**Status:** ⬜ NOT DONE
+**Priority:** HIGH
+**Issue:** Menu navigation uses incorrect URL paths that return 404
+
+The WordPress menu uses old/incorrect URL paths. These pages exist but at different URLs. Add Nginx redirects to fix.
+
+### Broken URLs and Correct Destinations
+
+| Broken URL | Correct URL | Issue |
+|------------|-------------|-------|
+| `/en/villas/` | `/en/room/` | Wrong slug |
+| `/en/offers/` | `/en/hotel-offers/` | Wrong slug |
+| `/en/dining/` | `/en/bali-restaurants/` | Wrong slug |
+| `/en/experiences/activities/` | `/en/bali-activities/` | Wrong path |
+| `/en/experiences/destination/` | `/en/ubud/` | Wrong path |
+| `/en/media/galleries/` | `/en/gallery/` | Wrong path |
+| `/en/media/viceroy-story/` | `/en/about/` | Wrong path |
+| `/en/destination/` | `/en/ubud/` | Wrong slug |
+
+### Fix Option 1: Add Nginx Redirects (Recommended)
+
+SSH to server and edit Nginx config:
+```bash
+ssh -i ~/.ssh/id_ed25519_gaia root@34.158.47.112
+nano /etc/nginx/sites-available/viceroybali
+```
+
+Add these redirects inside the `server` block (before the `location /` block):
+```nginx
+# Fix broken navigation URLs - redirect to correct pages
+location = /en/villas/ { return 301 /en/room/; }
+location = /en/offers/ { return 301 /en/hotel-offers/; }
+location = /en/dining/ { return 301 /en/bali-restaurants/; }
+location = /en/experiences/activities/ { return 301 /en/bali-activities/; }
+location = /en/experiences/destination/ { return 301 /en/ubud/; }
+location = /en/media/galleries/ { return 301 /en/gallery/; }
+location = /en/media/viceroy-story/ { return 301 /en/about/; }
+location = /en/destination/ { return 301 /en/ubud/; }
+
+# Also handle /viceroybali/ prefix during staging
+location = /viceroybali/en/villas/ { return 301 /viceroybali/en/room/; }
+location = /viceroybali/en/offers/ { return 301 /viceroybali/en/hotel-offers/; }
+location = /viceroybali/en/dining/ { return 301 /viceroybali/en/bali-restaurants/; }
+location = /viceroybali/en/experiences/activities/ { return 301 /viceroybali/en/bali-activities/; }
+location = /viceroybali/en/experiences/destination/ { return 301 /viceroybali/en/ubud/; }
+location = /viceroybali/en/media/galleries/ { return 301 /viceroybali/en/gallery/; }
+location = /viceroybali/en/media/viceroy-story/ { return 301 /viceroybali/en/about/; }
+location = /viceroybali/en/destination/ { return 301 /viceroybali/en/ubud/; }
+```
+
+Test and reload:
+```bash
+nginx -t && systemctl reload nginx
+```
+
+### Fix Option 2: Update WordPress Menu URLs
+
+Alternative: Update the menu items directly in WordPress admin:
+1. WP Admin → Appearance → Menus
+2. Find each broken menu item
+3. Change the URL to the correct path
+
+### Fix Option 3: WordPress Redirection Plugin
+
+If menu updates are complex:
+1. Install "Redirection" plugin
+2. Add 301 redirects for each broken URL → correct URL
+
+### Verification After Fix
+
+Test all 8 URLs return 200 (after following redirect):
+```bash
+for url in "/en/villas/" "/en/offers/" "/en/dining/" "/en/experiences/activities/" "/en/experiences/destination/" "/en/media/galleries/" "/en/media/viceroy-story/" "/en/destination/"; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" -L "http://34.158.47.112/viceroybali$url")
+  echo "$url → $status"
+done
+```
+
+Expected: All should return `200`
 
 ---
 

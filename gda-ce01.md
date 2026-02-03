@@ -108,8 +108,8 @@ All services running:
 
 ## WordPress Configuration
 
-- Site URL: `http://34.158.47.112/viceroybali`
-- Home URL: `http://34.158.47.112/viceroybali`
+- Site URL: `http://34.158.47.112/viceroybali/`
+- Home URL: `http://34.158.47.112/viceroybali/`
 - Web Root: `/var/www/viceroybali/public_html/`
 
 ---

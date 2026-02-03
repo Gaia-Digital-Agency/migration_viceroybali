@@ -6,6 +6,55 @@
 
 ## Session Log
 
+### Feb 3, 2026 - Page Inventory & URL Fixes
+
+**Complete Page Inventory (27 Pages for Go-Live)**
+
+All 27 main pages verified on staging. These will need URL update from `http://34.158.47.112/viceroybali/` to `https://www.viceroybali.com/` during Phase 2 cutover.
+
+| Section | Page | Current Path | Status |
+|---------|------|--------------|--------|
+| Home | English Homepage | `/en/` | ✅ |
+| Villas | All Accommodation | `/en/room/` | ✅ |
+| Villas | Pool Suite | `/en/room/pool-suite/` | ✅ |
+| Villas | Terrace Villas | `/en/room/terrace-villas/` | ✅ |
+| Villas | Deluxe Terrace Villa | `/en/room/deluxe-terrace-villa/` | ✅ |
+| Villas | Premium Club Pool Villa | `/en/room/premium-club-pool-villa/` | ✅ |
+| Villas | Elephant Villa | `/en/room/elephant-villa/` | ✅ |
+| Villas | Vice Regal Villa | `/en/room/vice-regal-villa/` | ✅ |
+| Villas | Viceroy Bali Villa | `/en/room/viceroy-bali/` | ✅ |
+| Villas | Garden Villa | `/en/room/garden-villa/` | ✅ |
+| Offers | Hotel Offers | `/en/hotel-offers/` | ✅ |
+| Offers | Packages | `/en/packages/` | ✅ |
+| Dining | Bali Restaurants | `/en/bali-restaurants/` | ✅ |
+| Experiences | Wellness | `/en/wellness/` | ✅ |
+| Experiences | Activities | `/en/bali-activities/` | ✅ |
+| Experiences | Destination | `/en/ubud/` | ✅ |
+| Media | Gallery | `/en/gallery/` | ✅ |
+| Media | Blog | `/en/blog/` | ✅ |
+| Media | Viceroy Story | `/en/about/` | ✅ |
+| Other | Facilities | `/en/facilities/` | ✅ |
+| Other | Contact | `/en/contact/` | ✅ |
+| Other | Reservation | `/en/reservation/` | ✅ |
+
+**8 Broken Navigation URLs (Fixed with Nginx Redirects)**
+
+Menu uses incorrect paths - added 301 redirects:
+| Broken | Redirects To |
+|--------|--------------|
+| `/en/villas/` | `/en/room/` |
+| `/en/offers/` | `/en/hotel-offers/` |
+| `/en/dining/` | `/en/bali-restaurants/` |
+| `/en/experiences/activities/` | `/en/bali-activities/` |
+| `/en/experiences/destination/` | `/en/ubud/` |
+| `/en/media/galleries/` | `/en/gallery/` |
+| `/en/media/viceroy-story/` | `/en/about/` |
+| `/en/destination/` | `/en/ubud/` |
+
+See [Pre_migration.md](../Pre_migration.md) for fix instructions.
+
+---
+
 ### Feb 1, 2026 - Staging URL Fixes
 
 **Changes Made:**
