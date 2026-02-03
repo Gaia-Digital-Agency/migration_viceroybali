@@ -84,14 +84,14 @@ rm -rf /var/www/viceroybali/lscache/*
 
 ### Location: /var/www/viceroybali/public_html/wp-content/cache/
 **Size:** ~50 MB (estimated)
-**Status:** ✅ Safe to remove
+**Status:** ⚠️ Keep - Used by WP Rocket
 
 ```bash
-# Remove WordPress plugin caches
-rm -rf /var/www/viceroybali/public_html/wp-content/cache/*
+# DO NOT remove - WP Rocket stores page cache here
+# Only clear via WP Rocket admin panel if needed
 ```
 
-**Reason:** Will be regenerated automatically by caching plugins.
+**Reason:** WP Rocket is now active and uses this directory for page caching.
 
 ### Location: /var/www/viceroybali/public_html/wp-content/litespeed/
 **Size:** ~20 MB (estimated)
@@ -102,7 +102,7 @@ rm -rf /var/www/viceroybali/public_html/wp-content/cache/*
 rm -rf /var/www/viceroybali/public_html/wp-content/litespeed/*
 ```
 
-**Reason:** LiteSpeed Cache plugin incompatible with Nginx.
+**Reason:** LiteSpeed Cache plugin has been **deactivated** (Feb 2, 2026). WP Rocket is now active instead.
 
 ## 3. Temporary Files (MEDIUM PRIORITY - 177 MB)
 
@@ -328,13 +328,14 @@ rm /var/www/viceroybali/public_html/.htaccess*
 **Reason:** Apache .htaccess files. Nginx uses different configuration.
 
 ### Location: /var/www/viceroybali/public_html/wp-content/advanced-cache.php
-**Status:** ✅ Safe to remove
+**Status:** ❌ DO NOT REMOVE - Used by WP Rocket
 
 ```bash
-rm /var/www/viceroybali/public_html/wp-content/advanced-cache.php
+# DO NOT remove - WP Rocket uses this for page caching
+# This file is now managed by WP Rocket (not LiteSpeed)
 ```
 
-**Reason:** LiteSpeed Cache advanced cache file (incompatible with Nginx).
+**Reason:** WP Rocket is now active and uses advanced-cache.php for page caching.
 
 ## Cleanup Script
 
@@ -352,7 +353,7 @@ rm -rf /var/www/viceroybali/wordpress-backups/
 
 # Cache directories (120 MB)
 rm -rf /var/www/viceroybali/lscache/*
-rm -rf /var/www/viceroybali/public_html/wp-content/cache/*
+# DO NOT remove wp-content/cache/ - used by WP Rocket
 rm -rf /var/www/viceroybali/public_html/wp-content/litespeed/*
 
 # Temporary files (177 MB)
@@ -378,8 +379,7 @@ rm -rf /var/www/viceroybali/cache/
 rm -rf /var/www/viceroybali/public_html/.quarantine/
 rm -rf /var/www/viceroybali/public_html/.tmb/
 
-# LiteSpeed files
-rm /var/www/viceroybali/public_html/wp-content/advanced-cache.php
+# LiteSpeed files (DO NOT remove advanced-cache.php - used by WP Rocket)
 rm /var/www/viceroybali/public_html/.htaccess*
 
 echo "Cleanup complete!"
@@ -410,7 +410,7 @@ bash cleanup.sh
 df -h /
 
 # Verify WordPress still works
-curl -I http://34.142.200.251
+curl -I http://34.158.47.112
 
 # Check for any errors
 tail -f /var/log/nginx/viceroybali_error.log

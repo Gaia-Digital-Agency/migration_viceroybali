@@ -55,7 +55,7 @@ nginx -v
 server {
     listen 80;
     listen [::]:80;
-    server_name www.viceroybali.com viceroybali.com 34.142.200.251;
+    server_name www.viceroybali.com viceroybali.com 34.158.47.112;
 
     root /var/www/viceroybali/public_html;
     index index.php index.html index.htm;
@@ -137,7 +137,7 @@ server {
 ```nginx
 listen 80;
 listen [::]:80;
-server_name www.viceroybali.com viceroybali.com 34.142.200.251;
+server_name www.viceroybali.com viceroybali.com 34.158.47.112;
 ```
 
 - Listens on port 80 (HTTP) for IPv4 and IPv6
@@ -287,7 +287,7 @@ location = /health {
 ### 1. Create Configuration File
 
 ```bash
-ssh -i ~/.ssh/id_ed25519_gaia root@34.142.200.251
+ssh -i ~/.ssh/id_ed25519_gaia root@34.158.47.112
 
 cat > /etc/nginx/sites-available/viceroybali << 'NGINXCONF'
 [Full configuration from above]
@@ -540,6 +540,48 @@ Nginx serves origin content to Google Cloud CDN:
 - [x] Health check endpoint functional
 - [x] Logging configured
 - [x] WordPress permalinks working
+- [x] Multi-site path-based routing configured
+
+---
+
+## Multi-Site Configuration (Staging)
+
+As of February 3, 2026, Nginx is configured for path-based routing to support multiple staging sites.
+
+### URL Routing
+
+| Path | Document Root | Content |
+|------|---------------|---------|
+| `/` | Redirect | → `/viceroybali/` |
+| `/viceroybali/` | `/var/www/viceroybali/public_html/` | WordPress staging |
+| `/02production/` | `/var/www/02production/` | Placeholder |
+| `/03production/` | `/var/www/03production/` | Placeholder |
+| `/health` | - | Load balancer health check |
+
+### Key Configuration Changes
+
+The multi-site config uses `location ^~` with `alias` directives for path-based routing:
+
+```nginx
+# Viceroybali WordPress
+location ^~ /viceroybali/ {
+    alias /var/www/viceroybali/public_html/;
+    # ... WordPress handling
+}
+
+# Production placeholders
+location ^~ /02production/ {
+    alias /var/www/02production/;
+    # ...
+}
+
+location ^~ /03production/ {
+    alias /var/www/03production/;
+    # ...
+}
+```
+
+For complete configuration, see [multisite_staging.md](../setup/multisite_staging.md).
 
 ---
 

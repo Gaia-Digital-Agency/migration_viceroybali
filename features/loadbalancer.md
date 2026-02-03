@@ -44,7 +44,7 @@ Global HTTP(S) Load Balancer with SSL termination, HTTP-to-HTTPS redirect, and C
                             |
                    +--------v--------+
                    |  viceroy-bali   |
-                   |  34.142.200.251 |
+                   |  34.158.47.112 |
                    |  Nginx + PHP    |
                    +-----------------+
 ```

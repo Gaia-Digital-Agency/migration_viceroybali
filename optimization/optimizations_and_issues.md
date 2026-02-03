@@ -2,7 +2,7 @@
 
 **Project:** Viceroy Bali Staging
 **Date:** February 1, 2026
-**Server:** 34.142.200.251
+**Server:** 34.158.47.112
 
 ## Critical Issues
 
@@ -24,7 +24,7 @@
 **Solution:**
 ```bash
 # Use WP-CLI for safe search-replace (handles serialized data)
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables \
@@ -345,7 +345,7 @@ redis-cli info stats
 
 ### 1. Fix Book Now (CRITICAL)
 ```bash
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables

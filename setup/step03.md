@@ -29,14 +29,14 @@ Configure web server, setup GCP Global Load Balancer with CDN, and configure fir
 ### Server Access
 
 ```bash
-ssh -i ~/.ssh/id_ed25519_gaia root@34.142.200.251
+ssh -i ~/.ssh/id_ed25519_gaia root@34.158.47.112
 ```
 
 ### Important IP Addresses
 
 | Resource | IP Address |
 |----------|------------|
-| **VM Instance** | 34.142.200.251 |
+| **VM Instance** | 34.158.47.112 |
 | **Load Balancer** | 34.49.188.147 |
 
 ### Service Status
@@ -69,7 +69,7 @@ systemctl status mariadb
 
 **Quick Test:**
 ```bash
-curl -I http://34.142.200.251/health
+curl -I http://34.158.47.112/health
 # Expected: HTTP/1.1 200 OK
 ```
 
@@ -195,7 +195,7 @@ gcloud compute firewall-rules list --filter="name~viceroybali"
                             |
                    +--------v--------+
                    |  viceroy-bali   |
-                   |  34.142.200.251 |
+                   |  34.158.47.112 |
                    |  Nginx + PHP    |
                    +--------+--------+
                             |
@@ -212,7 +212,7 @@ gcloud compute firewall-rules list --filter="name~viceroybali"
 
 ```bash
 # Test via VM IP
-curl -I http://34.142.200.251
+curl -I http://34.158.47.112
 ```
 
 **Note:** Currently showing "Hello World" test page. WordPress deployment pending.
@@ -342,4 +342,4 @@ gcloud compute ssl-certificates describe viceroybali-ssl-cert \
 **Status:** Infrastructure deployment complete
 **Current State:** Ready for WordPress deployment
 **Live Production Site:** https://www.viceroybali.com/ (untouched on Hostinger)
-**Staging Site:** http://34.142.200.251 (Hello World test page)
+**Staging Site:** http://34.158.47.112 (Hello World test page)

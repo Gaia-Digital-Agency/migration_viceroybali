@@ -122,13 +122,13 @@ gcloud compute firewall-rules list \
 
 ```bash
 # Test from outside - should succeed
-curl -I http://34.142.200.251
+curl -I http://34.158.47.112
 
 # Check if port 80 is accessible
-nc -zv 34.142.200.251 80
+nc -zv 34.158.47.112 80
 
 # Check if port 443 is accessible
-nc -zv 34.142.200.251 443
+nc -zv 34.158.47.112 443
 ```
 
 ### View Specific Rule Details

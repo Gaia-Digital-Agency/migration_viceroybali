@@ -2,7 +2,7 @@
 
 **Project:** Viceroy Bali Migration
 **Goal:** Deploy WordPress staging site matching https://www.viceroybali.com/
-**Access:** Via IP address 34.142.200.251 (staging only, no DNS changes)
+**Access:** Via IP address 34.158.47.112 (staging only, no DNS changes)
 
 ---
 
@@ -32,7 +32,7 @@
 
 ```bash
 # Connect to server
-ssh -i ~/.ssh/id_ed25519_gaia root@34.142.200.251
+ssh -i ~/.ssh/id_ed25519_gaia root@34.158.47.112
 
 # Import database snapshot
 mysql -u viceroy_user -p viceroy_db_name < /var/www/backups/viceroy_db_snapshot.sql
@@ -150,7 +150,7 @@ rm /var/www/viceroybali/public_html/wp-content/plugins.zip
 
 ```bash
 # Option 1: Using WP-CLI (recommended)
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --dry-run
@@ -159,8 +159,8 @@ wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
 
 # Option 2: Using MySQL (alternative)
 mysql -u viceroy_user -p viceroy_db_name << EOF
-UPDATE vb21_options SET option_value = 'http://34.142.200.251' WHERE option_name = 'siteurl';
-UPDATE vb21_options SET option_value = 'http://34.142.200.251' WHERE option_name = 'home';
+UPDATE vb21_options SET option_value = 'http://34.158.47.112' WHERE option_name = 'siteurl';
+UPDATE vb21_options SET option_value = 'http://34.158.47.112' WHERE option_name = 'home';
 EOF
 ```
 
@@ -211,10 +211,10 @@ EOF
 
 ```bash
 # Test basic WordPress load
-curl -I http://34.142.200.251
+curl -I http://34.158.47.112
 
 # Test WordPress admin
-curl -I http://34.142.200.251/wp-admin/
+curl -I http://34.158.47.112/wp-admin/
 
 # Check PHP errors
 tail -f /var/log/nginx/viceroybali_error.log
@@ -378,5 +378,5 @@ Site is ready when:
 ---
 
 **Status:** Ready to execute
-**Staging URL:** http://34.142.200.251 (after deployment)
+**Staging URL:** http://34.158.47.112 (after deployment)
 **Production URL:** https://www.viceroybali.com/ (untouched)

@@ -8,7 +8,7 @@
 
 ## Problem Summary
 
-The **Book Now** functionality on the staging site (http://34.142.200.251) redirects users to the production domain (https://www.viceroybali.com), making it impossible to test the booking flow on staging.
+The **Book Now** functionality on the staging site (http://34.158.47.112) redirects users to the production domain (https://www.viceroybali.com), making it impossible to test the booking flow on staging.
 
 ### Observable Symptoms:
 - ✅ Book Now button appears on pages
@@ -86,7 +86,7 @@ Use WP-CLI's `search-replace` command to safely update all URLs across the entir
 ### Command:
 
 ```bash
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables \
@@ -99,7 +99,7 @@ wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
 | Parameter | Purpose |
 |-----------|---------|
 | `'https://www.viceroybali.com'` | Old URL to find |
-| `'http://34.142.200.251'` | New staging IP to replace with |
+| `'http://34.158.47.112'` | New staging IP to replace with |
 | `--path=/var/www/viceroybali/public_html/` | WordPress installation directory |
 | `--skip-columns=guid` | Don't change post GUIDs (WordPress best practice) |
 | `--all-tables` | Search all database tables (not just wp_ prefixed) |
@@ -150,7 +150,7 @@ Success: Exported to '/var/www/backups/before_url_fix_20260201_143022.sql'.
 
 ```bash
 # Run with --dry-run to see what would change
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables \
@@ -180,7 +180,7 @@ Success: 256 replacements to be made.
 
 ```bash
 # Actual replacement (REMOVES --dry-run)
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables \
@@ -238,24 +238,24 @@ wp option get siteurl --path=/var/www/viceroybali/public_html/ --allow-root
 
 **Expected:**
 ```
-http://34.142.200.251
-http://34.142.200.251
+http://34.158.47.112
+http://34.158.47.112
 ```
 
 #### Step 6: Test Book Now Functionality
 
 1. **Open staging site in browser:**
-   http://34.142.200.251
+   http://34.158.47.112
 
 2. **Navigate to a page with Book Now button:**
    Home page, room pages, or booking-related pages
 
 3. **Click "Book Now" button:**
-   - Should stay on staging domain (34.142.200.251)
+   - Should stay on staging domain (34.158.47.112)
    - Should NOT redirect to www.viceroybali.com
 
 4. **Check reservation page:**
-   http://34.142.200.251/en/reservation/
+   http://34.158.47.112/en/reservation/
    - Images should load from staging IP
    - Navigation links should point to staging IP
    - Cloudbeds booking widget should appear
@@ -291,7 +291,7 @@ After executing the fix:
 - Cannot test booking on staging
 
 ### After Fix:
-- Book Now → loads `http://34.142.200.251/en/reservation/`
+- Book Now → loads `http://34.158.47.112/en/reservation/`
 - All content loads from staging IP
 - Booking widget functional on staging
 - Can test complete booking flow
@@ -353,7 +353,7 @@ When deploying to production, you'll need the **reverse operation**:
 
 ```bash
 # PRODUCTION ONLY - converts staging URLs back to production
-wp search-replace 'http://34.142.200.251' 'https://www.viceroybali.com' \
+wp search-replace 'http://34.158.47.112' 'https://www.viceroybali.com' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables \
@@ -439,7 +439,7 @@ Viceroy Bali uses **Polylang** for multi-language support:
 ```sql
 -- DON'T USE THIS - Will corrupt serialized data!
 UPDATE vb21_posts
-SET post_content = REPLACE(post_content, 'https://www.viceroybali.com', 'http://34.142.200.251');
+SET post_content = REPLACE(post_content, 'https://www.viceroybali.com', 'http://34.158.47.112');
 ```
 **Verdict:** ⚠️ **NEVER USE** - Corrupts serialized data
 
@@ -489,7 +489,7 @@ wp db query "SELECT COUNT(*) FROM vb21_posts WHERE post_content LIKE '%www.vicer
   --path=/var/www/viceroybali/public_html/ --allow-root
 
 # Try without https://
-wp search-replace 'www.viceroybali.com' '34.142.200.251' --dry-run ...
+wp search-replace 'www.viceroybali.com' '34.158.47.112' --dry-run ...
 ```
 
 ## Commands Quick Reference
@@ -502,12 +502,12 @@ wp db export /var/www/backups/before_url_fix_$(date +%Y%m%d_%H%M%S).sql \
   --path=/var/www/viceroybali/public_html/ --allow-root
 
 # 2. Dry run
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid --all-tables --dry-run --allow-root
 
 # 3. Execute
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid --all-tables --report-changed-only --allow-root
 

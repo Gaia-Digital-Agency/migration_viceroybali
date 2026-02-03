@@ -4,8 +4,6 @@
 **Purpose:** Document the complete process for moving staging site to production
 **IMPORTANT:** This is documentation only - DO NOT execute without explicit approval
 
----
-
 ## Session Log
 
 ### Feb 1, 2026 - Staging URL Fixes
@@ -20,7 +18,7 @@
 
 3. **Updated 2 nav menu items** - "Book Now" and "Facilities" menu links
    - Was: `https://www.viceroybali.com/en/facilities/`
-   - Now: `http://34.142.200.251/en/facilities/`
+   - Now: `http://34.158.47.112/en/facilities/`
 
 4. **Updated Facilities page ACF fields** (11 entries)
    - All `more_facilities_*` links now point to staging
@@ -40,11 +38,9 @@
 - [ ] Continue testing staging site
 - [ ] When ready: Run go-live URL replacement (see "Go-Live Actions Required" section)
 
----
-
 ## Overview
 
-This document outlines the complete process for transitioning the staging WordPress site (currently on http://34.142.200.251) to production (https://www.viceroybali.com) via DNS cutover.
+This document outlines the complete process for transitioning the staging WordPress site (currently on http://34.158.47.112) to production (https://www.viceroybali.com) via DNS cutover.
 
 **Key Principle:** Zero downtime migration with instant rollback capability
 
@@ -54,7 +50,7 @@ This document outlines the complete process for transitioning the staging WordPr
 
 **Must be completed before proceeding:**
 
-- [ ] WordPress loads correctly on http://34.142.200.251
+- [ ] WordPress loads correctly on http://34.158.47.112
 - [ ] All pages render properly (villas, facilities, about)
 - [ ] Images display correctly
 - [ ] Booking system functional (after URL fix)
@@ -118,19 +114,19 @@ gs://viceroybali_bucket/viceroy_db_snapshot.sql (183MB)
 
 ### ⚠️ CRITICAL: URL Changes Required During Porting
 
-**Staging URL:** `http://34.142.200.251`
+**Staging URL:** `http://34.158.47.112`
 **Production URL:** `https://www.viceroybali.com/en/`
 
 During the port from staging to live, ALL references to the staging IP must be changed to the production domain. This affects:
 
 | Component | Staging Value | Production Value |
 |-----------|---------------|------------------|
-| WordPress Site URL | `http://34.142.200.251` | `https://www.viceroybali.com` |
-| WordPress Home URL | `http://34.142.200.251` | `https://www.viceroybali.com` |
+| WordPress Site URL | `http://34.158.47.112` | `https://www.viceroybali.com` |
+| WordPress Home URL | `http://34.158.47.112` | `https://www.viceroybali.com` |
 | Default Homepage | `/` | `/en/` (multi-language default) |
-| Internal Links | `http://34.142.200.251/en/...` | `https://www.viceroybali.com/en/...` |
-| Image URLs | `http://34.142.200.251/wp-content/...` | `https://www.viceroybali.com/wp-content/...` |
-| Sitemap URLs | `http://34.142.200.251/...` | `https://www.viceroybali.com/...` |
+| Internal Links | `http://34.158.47.112/en/...` | `https://www.viceroybali.com/en/...` |
+| Image URLs | `http://34.158.47.112/wp-content/...` | `https://www.viceroybali.com/wp-content/...` |
+| Sitemap URLs | `http://34.158.47.112/...` | `https://www.viceroybali.com/...` |
 
 **Multi-Language Note:**
 The site uses WPML for multi-language support. The default homepage should redirect to `/en/` for English. Verify these language URLs work after migration:
@@ -138,20 +134,16 @@ The site uses WPML for multi-language support. The default homepage should redir
 - Japanese: `https://www.viceroybali.com/ja/`
 - Korean: `https://www.viceroybali.com/ko/`
 
----
-
 ### Staging IP Audit (Feb 2026) - Updated
 
 **Search Command:**
 ```bash
-wp db search '34.142.200.251' --path=/var/www/viceroybali/public_html/ --allow-root
+wp db search '34.158.47.112' --path=/var/www/viceroybali/public_html/ --allow-root
 ```
-
----
 
 #### Current URL State Summary
 
-##### ✅ Using Staging URL (`http://34.142.200.251`)
+##### ✅ Using Staging URL (`http://34.158.47.112`)
 
 | Item | Count | Notes |
 |------|-------|-------|
@@ -177,13 +169,11 @@ wp db search '34.142.200.251' --path=/var/www/viceroybali/public_html/ --allow-r
 
 **Total:** ~63,000 entries still use production URL (expected - imported from live site)
 
----
-
 #### Go-Live Actions Required
 
 **Step 1: Replace staging URLs → production**
 ```bash
-wp search-replace 'http://34.142.200.251' 'https://www.viceroybali.com' \
+wp search-replace 'http://34.158.47.112' 'https://www.viceroybali.com' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables \
@@ -192,7 +182,7 @@ wp search-replace 'http://34.142.200.251' 'https://www.viceroybali.com' \
 
 **Step 2: Verify no staging URLs remain**
 ```bash
-wp db search '34.142.200.251' --path=/var/www/viceroybali/public_html/ --allow-root
+wp db search '34.158.47.112' --path=/var/www/viceroybali/public_html/ --allow-root
 # Should return: No matches found
 ```
 
@@ -200,25 +190,23 @@ wp db search '34.142.200.251' --path=/var/www/viceroybali/public_html/ --allow-r
 - Go to WP Admin → Custom Fields → Updates
 - Re-enter license key if needed
 
----
-
 ### Step 1: Change from Staging to Production URLs
 
-**Current State:** Database contains `http://34.142.200.251`
+**Current State:** Database contains `http://34.158.47.112`
 **Target State:** Database should contain `https://www.viceroybali.com`
 
 **Method 1: WP-CLI (Recommended)**
 
 ```bash
 # SSH to server
-ssh -i ~/.ssh/id_ed25519_gaia root@34.142.200.251
+ssh -i ~/.ssh/id_ed25519_gaia root@34.158.47.112
 
 # Backup database first
 wp db export /var/www/backups/before_production_urls.sql \
   --path=/var/www/viceroybali/public_html/
 
 # Search and replace URLs
-wp search-replace 'http://34.142.200.251' 'https://www.viceroybali.com' \
+wp search-replace 'http://34.158.47.112' 'https://www.viceroybali.com' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables \
@@ -226,7 +214,7 @@ wp search-replace 'http://34.142.200.251' 'https://www.viceroybali.com' \
   --dry-run
 
 # If dry-run looks good, run without --dry-run
-wp search-replace 'http://34.142.200.251' 'https://www.viceroybali.com' \
+wp search-replace 'http://34.158.47.112' 'https://www.viceroybali.com' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables
@@ -240,11 +228,11 @@ UPDATE vb21_options SET option_value = 'https://www.viceroybali.com' WHERE optio
 UPDATE vb21_options SET option_value = 'https://www.viceroybali.com' WHERE option_name = 'home';
 
 -- Update post content (be careful with serialized data)
-UPDATE vb21_posts SET post_content = REPLACE(post_content, 'http://34.142.200.251', 'https://www.viceroybali.com');
-UPDATE vb21_posts SET guid = REPLACE(guid, 'http://34.142.200.251', 'https://www.viceroybali.com');
+UPDATE vb21_posts SET post_content = REPLACE(post_content, 'http://34.158.47.112', 'https://www.viceroybali.com');
+UPDATE vb21_posts SET guid = REPLACE(guid, 'http://34.158.47.112', 'https://www.viceroybali.com');
 
 -- Update postmeta
-UPDATE vb21_postmeta SET meta_value = REPLACE(meta_value, 'http://34.142.200.251', 'https://www.viceroybali.com');
+UPDATE vb21_postmeta SET meta_value = REPLACE(meta_value, 'http://34.158.47.112', 'https://www.viceroybali.com');
 EOF
 ```
 
@@ -262,7 +250,7 @@ wp option get home --path=/var/www/viceroybali/public_html/
 # Should return: https://www.viceroybali.com
 
 # Search for any remaining staging URLs
-wp db search '34.142.200.251' \
+wp db search '34.158.47.112' \
   --path=/var/www/viceroybali/public_html/
 # Should return minimal or no results
 ```
@@ -281,8 +269,6 @@ define('WP_ENVIRONMENT_TYPE', 'staging');  // Remove this line
 # Optionally add:
 define('WP_ENVIRONMENT_TYPE', 'production');
 ```
-
----
 
 ## DNS Cutover Process
 
@@ -397,7 +383,7 @@ curl -w "@curl-format.txt" -o /dev/null -s https://www.viceroybali.com
 
 ```bash
 # SSH to server
-ssh -i ~/.ssh/id_ed25519_gaia root@34.142.200.251
+ssh -i ~/.ssh/id_ed25519_gaia root@34.158.47.112
 
 # Watch for errors
 tail -f /var/log/nginx/viceroybali_error.log
@@ -423,11 +409,9 @@ tail -f /var/log/nginx/viceroybali_access.log
 - Allows all major search engines
 
 **Sitemap Note:**
-The sitemap is dynamically generated by Yoast SEO. On staging (`http://34.142.200.251`), it currently shows staging URLs. After database URL update (see Step 1 below), sitemap will automatically reflect production URLs.
+The sitemap is dynamically generated by Yoast SEO. On staging (`http://34.158.47.112`), it currently shows staging URLs. After database URL update (see Step 1 below), sitemap will automatically reflect production URLs.
 
 **No action required** - both files will work correctly after DNS cutover.
-
----
 
 ### 1. Verify No URL Structure Changes ✅
 
@@ -458,8 +442,6 @@ After DNS cutover and SSL active:
 - Mixed content issues
 - Broken internal links
 
----
-
 ## Rollback Procedure
 
 ### If Critical Issues Discovered:
@@ -481,7 +463,7 @@ After DNS cutover and SSL active:
 mysql -u viceroy_user -pstrong_password viceroy_db_name < /var/www/backups/before_production_urls.sql
 
 # Or run reverse search-replace
-wp search-replace 'https://www.viceroybali.com' 'http://34.142.200.251' \
+wp search-replace 'https://www.viceroybali.com' 'http://34.158.47.112' \
   --path=/var/www/viceroybali/public_html/ \
   --skip-columns=guid \
   --all-tables
@@ -561,8 +543,6 @@ Update all documentation with:
 - Remove staging IP references
 - Update team access credentials if changed
 - Document any production-specific settings
-
----
 
 ## Timeline & Coordination
 

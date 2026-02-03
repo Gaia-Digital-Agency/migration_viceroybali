@@ -1,7 +1,7 @@
 # WordPress Admin Users Documentation
 
 **Project:** Viceroy Bali
-**Site:** http://34.142.200.251 (staging) / https://www.viceroybali.com (production)
+**Site:** http://34.158.47.112 (staging) / https://www.viceroybali.com (production)
 **Database:** viceroy_db_name
 **Date:** February 1, 2026
 
@@ -140,7 +140,7 @@ $P$B1234567890abcdefghijklmnopqrstuv
 
 #### Method 1: WordPress Admin Dashboard (Preferred)
 
-1. Login to WordPress admin: http://34.142.200.251/wp-admin/
+1. Login to WordPress admin: http://34.158.47.112/wp-admin/
 2. Navigate to: **Users → All Users**
 3. Click on the user to edit
 4. Scroll to "Account Management" section
@@ -170,7 +170,7 @@ wp user update USERNAME --user_pass="$(openssl rand -base64 16)" \
 
 #### Method 3: WordPress "Lost Password" Flow
 
-1. Go to: http://34.142.200.251/wp-login.php
+1. Go to: http://34.158.47.112/wp-login.php
 2. Click **"Lost your password?"**
 3. Enter username or email
 4. Check email for reset link
@@ -636,5 +636,6 @@ USER DATA
 +----+----------------+----------------+----------------+----------------+---------------------+
 
 WP-admun login
+/teamedior
 user gda-web
 pw: gda-web

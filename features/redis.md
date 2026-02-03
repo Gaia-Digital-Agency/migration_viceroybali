@@ -149,7 +149,7 @@ redis-cli info stats | grep keyspace
 
 ```bash
 # Test page load time
-curl -w "@curl-format.txt" -o /dev/null -s http://34.142.200.251/en/
+curl -w "@curl-format.txt" -o /dev/null -s http://34.158.47.112/en/
 
 # Before Redis: ~800-1200ms
 # After Redis: ~200-400ms (60-75% improvement)
@@ -508,9 +508,9 @@ If Redis crashes or is restarted:
 After deployment or cache flush:
 ```bash
 # Visit main pages to populate cache
-curl -s http://34.142.200.251/en/ > /dev/null
-curl -s http://34.142.200.251/en/villas/ > /dev/null
-curl -s http://34.142.200.251/en/facilities/ > /dev/null
+curl -s http://34.158.47.112/en/ > /dev/null
+curl -s http://34.158.47.112/en/villas/ > /dev/null
+curl -s http://34.158.47.112/en/facilities/ > /dev/null
 ```
 
 ### 2. Monitor Hit Rate
@@ -631,5 +631,30 @@ ini_set('session.save_path', 'tcp://127.0.0.1:6379');
 
 ---
 
-**Last Updated:** February 1, 2026
+## Integration with WP Rocket
+
+**Updated:** February 2, 2026
+
+The caching stack now uses a layered approach:
+
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| **Object Cache** | Redis + object-cache.php | Database query caching |
+| **Page Cache** | WP Rocket 3.20.1.2 | Full HTML page caching |
+| **Static Assets** | Google Cloud CDN | Images, CSS, JS caching |
+
+**Plugin Status:**
+- ✅ WP Rocket: **Active** (page cache, minification, lazy loading)
+- ❌ LiteSpeed Cache: **Deactivated** (incompatible with Nginx)
+- ✅ Redis object-cache.php: **Active** (database caching)
+
+**Why this combination works:**
+- Redis handles database-level caching (object cache)
+- WP Rocket handles page-level caching (HTML output)
+- Cloud CDN handles edge caching (static files globally)
+- No conflicts - each tool operates at a different layer
+
+---
+
+**Last Updated:** February 2, 2026
 **Status:** Operational and performing as expected

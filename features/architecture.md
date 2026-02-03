@@ -78,8 +78,8 @@
 │                                                  ▼                                                          │
 │  ┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐  │
 │  │                                    COMPUTE ENGINE VM                                                   │  │
-│  │                                    viceroy-bali                                                        │  │
-│  │                                    IP: 34.124.156.73                                                   │  │
+│  │                                    gda-ce01                                                            │  │
+│  │                                    IP: 34.158.47.112 (Static)                                          │  │
 │  │  ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐  │  │
 │  │  │  Machine: e2-standard-2 (2 vCPU / 8 GB RAM)                                                     │  │  │
 │  │  │  OS: Ubuntu 24.04 LTS                                                                           │  │  │
@@ -119,7 +119,29 @@
 
 ## File System Structure
 
-### Server Root
+### Multi-Site Root (Staging)
+
+```
+/var/www/
+├── viceroybali/
+│   └── public_html/              # WordPress (http://34.158.47.112/viceroybali/)
+├── 02production/
+│   └── index.html                # Placeholder (http://34.158.47.112/02production/)
+└── 03production/
+    └── index.html                # Placeholder (http://34.158.47.112/03production/)
+```
+
+### Nginx Path-Based Routing
+
+| Path | Document Root | Content |
+|------|---------------|---------|
+| `/` | Redirect | → `/viceroybali/` |
+| `/viceroybali/` | `/var/www/viceroybali/public_html/` | WordPress |
+| `/02production/` | `/var/www/02production/` | Placeholder |
+| `/03production/` | `/var/www/03production/` | Placeholder |
+| `/health` | - | Load balancer health check |
+
+### Server Root (viceroybali)
 
 ```
 /var/www/viceroybali/
@@ -266,15 +288,16 @@
 
 | Property | Value |
 |----------|-------|
-| Name | viceroy-bali |
+| Name | gda-ce01 |
 | Machine Type | e2-standard-2 |
 | vCPUs | 2 |
 | Memory | 8 GB |
 | Disk | 50 GB SSD (pd-balanced) - 20 GB free |
 | Zone | asia-southeast1-b |
-| External IP | 34.142.200.251 |
-| Internal IP | 10.148.0.3 |
+| External IP | 34.158.47.112 (Static: gda-ce01-static) |
+| Internal IP | 10.148.0.4 |
 | Network Tags | http-server, https-server |
+| Instance Group | gaiada-ce |
 
 ### 4. Application Stack
 
@@ -363,10 +386,13 @@
    │  Allow: 80, 443 from 0.0.0.0/0
    │
    ▼
-8. VM (viceroy-bali)
+8. VM (gda-ce01)
    │
    ▼
-9. Nginx
+9. Nginx (Path-Based Routing)
+   │  ├── /viceroybali/ → WordPress
+   │  ├── /02production/ → Placeholder
+   │  ├── /03production/ → Placeholder
    │  ├── Static files → Serve directly
    │  └── PHP files → FastCGI to PHP-FPM
    │
