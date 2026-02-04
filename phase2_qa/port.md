@@ -6,6 +6,38 @@
 
 ## Session Log
 
+### Feb 4, 2026 - Fixed Missing Homepage Images
+
+**Issue:** After changing staging URL from `http://34.158.47.112/` to `http://34.158.47.112/viceroybali/en/`, homepage images (hero image, videos, etc.) were not loading.
+
+**Root Cause:** HTML contained root-relative image paths like `src="/wp-content/uploads/..."` which resolved to the wrong location. These paths pointed to `http://34.158.47.112/wp-content/...` (404) instead of `http://34.158.47.112/viceroybali/wp-content/...`.
+
+**Affected Assets:**
+- Hero image: `/wp-content/uploads/2025/06/Viceroy-Bali-Luxury-villa.jpg`
+- Hero video: `/wp-content/uploads/2024/12/Viceroy-Bali-op.mp4`
+- Multiple other homepage images (webp files)
+
+**Fix Applied:** Added Nginx rewrite rule to `/etc/nginx/sites-available/viceroybali`:
+
+```nginx
+# FIX: Redirect root /wp-content/ paths to /viceroybali/wp-content/
+location ^~ /wp-content/ {
+    rewrite ^/wp-content/(.*)$ /viceroybali/wp-content/$1 redirect;
+}
+```
+
+**Commands Run:**
+```bash
+sudo sed -i '/location = \/ {/i\    # FIX: Redirect root /wp-content/ paths to /viceroybali/wp-content/\n    location ^~ /wp-content/ {\n        rewrite ^/wp-content/(.*)$ /viceroybali/wp-content/$1 redirect;\n    }\n' /etc/nginx/sites-available/viceroybali
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+**Result:** All homepage images now load correctly. The rewrite returns 302 redirect to the correct `/viceroybali/wp-content/...` path.
+
+**Note:** This redirect is staging-specific. After go-live when WordPress runs at the root domain, this rule can be removed from Nginx config.
+
+---
+
 ### Feb 3, 2026 - Page Inventory & URL Fixes
 
 **Complete Page Inventory (27 Pages for Go-Live)**

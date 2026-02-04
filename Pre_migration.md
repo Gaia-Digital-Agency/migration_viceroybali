@@ -2,7 +2,7 @@
 
 **Project:** Viceroy Bali - GCP Migration
 **Purpose:** Tasks remaining before DNS cutover
-**Last Updated:** February 2, 2026
+**Last Updated:** February 4, 2026
 **Status:** PHASE 1 COMPLETE - Ready for Phase 2
 
 ---
@@ -60,9 +60,22 @@ wp search-replace 'http://34.158.47.112/viceroybali' 'https://www.viceroybali.co
 
 ---
 
+## Known Staging Limitations (Domain-Whitelisted Widgets)
+
+These third-party widgets won't display on staging but will work automatically after DNS cutover:
+
+| Widget | Provider | Issue | Resolution |
+|--------|----------|-------|------------|
+| Review Summary Card | The Hotels Network | Domain whitelist | Auto-works on go-live |
+| Booking Widget | Cloudbeds | Domain whitelist | Auto-works on go-live |
+
+**Note:** Both widgets load on staging but don't render because they validate against `www.viceroybali.com` domain.
+
+---
+
 # Phase 1.5: Fix 8 Broken URL Paths
 
-**Status:** ⬜ NOT DONE
+**Status:** ✅ DONE (Feb 3, 2026)
 **Priority:** HIGH
 **Issue:** Menu navigation uses incorrect URL paths that return 404
 
@@ -141,6 +154,52 @@ done
 ```
 
 Expected: All should return `200`
+
+---
+
+# Phase 1.6: Fix Missing Images on Homepage
+
+**Status:** ✅ DONE (Feb 4, 2026)
+**Priority:** HIGH
+**Issue:** Hero image and other images missing on homepage at `/viceroybali/en/`
+
+### Problem
+
+After switching from root URL (`http://34.158.47.112/`) to subdirectory URL (`http://34.158.47.112/viceroybali/en/`), images were not loading. The HTML contained root-relative paths like:
+
+```html
+<img src="/wp-content/uploads/2025/06/Viceroy-Bali-Luxury-villa.jpg">
+```
+
+These resolved to `http://34.158.47.112/wp-content/...` (404) instead of `http://34.158.47.112/viceroybali/wp-content/...` (correct).
+
+### Solution Applied
+
+Added Nginx redirect rule for `/wp-content/` paths in `/etc/nginx/sites-available/viceroybali`:
+
+```nginx
+# FIX: Redirect root /wp-content/ paths to /viceroybali/wp-content/
+location ^~ /wp-content/ {
+    rewrite ^/wp-content/(.*)$ /viceroybali/wp-content/$1 redirect;
+}
+```
+
+### Verification
+
+```bash
+# Before fix:
+curl -sI 'http://34.158.47.112/wp-content/uploads/2025/06/Viceroy-Bali-Luxury-villa.jpg'
+# HTTP/1.1 404 Not Found
+
+# After fix:
+curl -sI 'http://34.158.47.112/wp-content/uploads/2025/06/Viceroy-Bali-Luxury-villa.jpg'
+# HTTP/1.1 302 Moved Temporarily
+# Location: http://34.158.47.112/viceroybali/wp-content/uploads/2025/06/Viceroy-Bali-Luxury-villa.jpg
+```
+
+### Note for Go-Live
+
+This Nginx redirect is only needed during staging when WordPress runs in the `/viceroybali/` subdirectory. After DNS cutover when WordPress runs at the root domain (`https://www.viceroybali.com/`), this redirect can be removed.
 
 ---
 
